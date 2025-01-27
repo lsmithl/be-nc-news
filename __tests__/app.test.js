@@ -51,4 +51,39 @@ describe("nc_news", () => {
         });
     });
   });
+
+  describe("ALL /* any URL or method which has not been defined as an endpoint", () => {
+    test('404: Responds with message "Not Found" ', () => {
+      return request(app)
+        .get("/badURL")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        })
+        .then(() => {
+          return request(app)
+            .post("/api")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.msg).toBe("Not Found");
+            });
+        })
+        .then(() => {
+          return request(app)
+            .patch("/api")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.msg).toBe("Not Found");
+            });
+        })
+        .then(() => {
+          return request(app)
+            .delete("/api")
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.msg).toBe("Not Found");
+            });
+        });
+    });
+  });
 });

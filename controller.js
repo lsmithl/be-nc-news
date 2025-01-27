@@ -5,12 +5,12 @@ exports.getEndpoints = (req, res) => {
   res.send({ endpoints });
 };
 
-exports.getTopics = (req, res) => {
+exports.getTopics = (req, res, next) => {
   selectTopics()
     .then((topics) => {
       res.send({ topics });
     })
-    .catch(() => {
-      res.status(404).send({ msg: "Not Found" });
+    .catch((err) => {
+      next(err);
     });
 };
