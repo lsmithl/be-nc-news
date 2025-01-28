@@ -51,6 +51,32 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("GET /api/articles", () => {
+    test("200:  Responds with an object containing an array of all articles, sorted by date in descending order", () => {
+      return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles.length).toBe(13);
+          articles.forEach((article) => {
+            expect(article).toMatchObject({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number),
+            });
+            expect(article.body).toBeUndefined();
+          });
+          expect(articles).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+    });
+  });
   describe("GET /api/articles/:article_id", () => {
     test("200: Responds with an article object of the specified ID", () => {
       return request(app)

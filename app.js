@@ -1,7 +1,12 @@
 const express = require("express");
 const app = express();
 
-const { getEndpoints, getTopics, getArticlesById } = require("./controller");
+const {
+  getEndpoints,
+  getTopics,
+  getArticlesById,
+  getArticles,
+} = require("./controller");
 const {
   sqlError,
   customError,
@@ -12,6 +17,8 @@ const {
 app.get("/api", getEndpoints);
 
 app.get("/api/topics", getTopics);
+
+app.get("/api/articles/", getArticles);
 
 app.get("/api/articles/:article_id", getArticlesById);
 
