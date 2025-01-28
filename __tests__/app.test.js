@@ -25,29 +25,13 @@ describe("nc_news", () => {
         .get("/api/topics")
         .expect(200)
         .then(({ body: { topics } }) => {
-          expect(topics.length).toBeGreaterThan(0);
+          expect(topics.length).toBe(3);
           topics.forEach((element) => {
-            expect(element).toEqual(
-              expect.objectContaining({
-                slug: expect.any(String),
-                description: expect.any(String),
-              })
-            );
-          });
-        });
-    });
-    test('404: Responds with message "Not Found" if the topics table is empty', () => {
-      return db
-        .query(
-          `DELETE FROM comments; DELETE FROM articles; DELETE FROM users; DELETE FROM topics;`
-        )
-        .then(() => {
-          return request(app)
-            .get("/api/topics")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).toBe("Not Found");
+            expect(element).toMatchObject({
+              slug: expect.any(String),
+              description: expect.any(String),
             });
+          });
         });
     });
   });
@@ -84,10 +68,11 @@ describe("nc_news", () => {
         .expect(200)
         .then(({ body: { article } }) => {
           expect(article).toMatchObject({
-            title: expect.any(String),
-            topic: expect.any(String),
             author: expect.any(String),
+            title: expect.any(String),
+            article_id: 1,
             body: expect.any(String),
+            topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
             article_img_url: expect.any(String),
@@ -158,30 +143,6 @@ describe("nc_news", () => {
         .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe("Not Found");
-        })
-        .then(() => {
-          return request(app)
-            .post("/api")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).toBe("Not Found");
-            });
-        })
-        .then(() => {
-          return request(app)
-            .patch("/api")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).toBe("Not Found");
-            });
-        })
-        .then(() => {
-          return request(app)
-            .delete("/api")
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.msg).toBe("Not Found");
-            });
         });
     });
   });

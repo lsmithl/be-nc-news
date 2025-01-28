@@ -10,24 +10,16 @@ exports.getEndpoints = (req, res) => {
   res.send({ endpoints });
 };
 
-exports.getTopics = (req, res, next) => {
-  selectTopics()
-    .then((topics) => {
-      res.send({ topics });
-    })
-    .catch((err) => {
-      next(err);
-    });
+exports.getTopics = (req, res) => {
+  selectTopics().then((topics) => {
+    res.send({ topics });
+  });
 };
 
-exports.getArticles = (req, res, next) => {
-  selectArticles(req.params)
-    .then((articles) => {
-      res.send({ articles });
-    })
-    .catch((err) => {
-      next(err);
-    });
+exports.getArticles = (req, res) => {
+  selectArticles().then((articles) => {
+    res.send({ articles });
+  });
 };
 
 exports.getArticlesById = (req, res, next) => {
