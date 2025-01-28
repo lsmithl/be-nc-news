@@ -51,6 +51,40 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("GET /api/articles/:article_id", () => {
+    test("200: Responds with an article object of the specified ID", () => {
+      return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({ body: { article } }) => {
+          expect(article).toMatchObject({
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          });
+        });
+    });
+    test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
+      return request(app)
+        .get("/api/articles/ten")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('404: Responds with message "Not Found" if the ID doesn\'t exist', () => {
+      return request(app)
+        .get("/api/articles/9999")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
 
   describe("ALL /* any URL or method which has not been defined as an endpoint", () => {
     test('404: Responds with message "Not Found" ', () => {
