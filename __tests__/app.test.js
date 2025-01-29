@@ -268,6 +268,36 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("204: Responds with no content and deletes the specified comment", () => {
+      return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then(() => {
+          return db
+            .query(`SELECT * FROM comments WHERE comment_id = 1;`)
+            .then(({ rows }) => {
+              expect(rows.length).toBe(0);
+            });
+        });
+    });
+    test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
+      return request(app)
+        .delete("/api/comments/ten")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('404: Responds with message "Not Found" if the comment ID doesn\'t exist', () => {
+      return request(app)
+        .delete("/api/comments/9999")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
 
   describe("ALL /* any URL or method which has not been defined as an endpoint", () => {
     test('404: Responds with message "Not Found" ', () => {
