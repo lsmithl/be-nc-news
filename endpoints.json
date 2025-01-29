@@ -60,6 +60,21 @@
           "article_id": 9
         }
       ]
+    },
+    "POST /api/articles/:article_id/comments": {
+      "description": "adds a new comment to the specified article and responds with the successfully posted new comment",
+      "parameters": ":article_id (Number)",
+      "queries": [],
+      "exampleResponse": {
+        "newComment": {
+          "comment_id": 1,
+          "body": "This is my first comment, and the first comment on this article! First²!",
+          "article_id": 1,
+          "author": "icellusedkars",
+          "votes": 0,
+          "created_at": "2025-01-29T11:03:07.611Z"
+        }
+      }
     }
   }
 }
