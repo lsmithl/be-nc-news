@@ -118,6 +118,14 @@ describe("nc_news", () => {
           });
         });
     });
+    test("200: Responds with an object containing an empty array if the article exists but has no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body: { comments } }) => {
+          expect(comments).toEqual([]);
+        });
+    });
     test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
       return request(app)
         .get("/api/articles/ten/comments")
