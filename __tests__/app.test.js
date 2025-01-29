@@ -36,7 +36,7 @@ describe("nc_news", () => {
     });
   });
   describe("GET /api/articles", () => {
-    test("200:  Responds with an object containing an array of all articles, sorted by date in descending order", () => {
+    test("200: Responds with an object containing an array of all articles, sorted by date in descending order", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -97,7 +97,7 @@ describe("nc_news", () => {
     });
   });
   describe("GET /api/articles/:article_id/comments", () => {
-    test("200: Responds Responds with an object containing an array of all comments of the article with the specified ID, sorted by most recent", () => {
+    test("200: Responds with an object containing an array of all comments of the article with the specified ID, sorted by most recent", () => {
       return request(app)
         .get("/api/articles/1/comments")
         .expect(200)
