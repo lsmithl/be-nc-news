@@ -80,7 +80,7 @@
         }
       }
     },
-    "CORE: PATCH /api/articles/:article_id": {
+    "PATCH /api/articles/:article_id": {
       "description": "updates the votes on the specified article by the amount given in the request and responds with the successfully updated article",
       "parameters": ":article_id (Number)",
       "queries": [],
