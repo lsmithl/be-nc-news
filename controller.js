@@ -4,6 +4,7 @@ const {
   selectArticlesById,
   selectArticles,
   selectCommentsByArticleId,
+  insertCommentByArticleId,
 } = require("./model.js");
 
 exports.getEndpoints = (req, res) => {
@@ -36,6 +37,16 @@ exports.getCommentsByArticleId = (req, res, next) => {
   selectCommentsByArticleId(req.params)
     .then((comments) => {
       res.send({ comments });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  insertCommentByArticleId(req.params, req.body)
+    .then((newComment) => {
+      res.status(201).send({ newComment });
     })
     .catch((err) => {
       next(err);

@@ -135,6 +135,74 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("POST /api/articles/:article_id/comments", () => {
+    test("201: Responds with an object containing the sucessfully posted comment", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          body: "I'm only commenting for the algorithm.",
+          author: "icellusedkars",
+        })
+        .expect(201)
+        .then(({ body: { newComment } }) => {
+          expect(newComment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: 0,
+            created_at: expect.any(String),
+            author: "icellusedkars",
+            body: "I'm only commenting for the algorithm.",
+            article_id: 1,
+          });
+        });
+    });
+    test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
+      return request(app)
+        .post("/api/articles/ten/comments")
+        .send({
+          body: "Hmm, does this work?",
+          author: "icellusedkars",
+        })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('400: Responds with message "Bad Request" if the posted body does not contain the correct fields', () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          comment: "Is this the right way to to make a comment? :/",
+        })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('401: Responds with message "Unregistered User" if the request is not from a registered user', () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          body: "I'm posting a comment but I don't have an account! yay!",
+          author: "unregistered_hyperuser",
+        })
+        .expect(401)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Unregistered User");
+        });
+    });
+    test('404: Responds with message "Not Found" if the article ID doesn\'t exist', () => {
+      return request(app)
+        .post("/api/articles/9999/comments")
+        .send({
+          body: "What happens if I do this?",
+          author: "icellusedkars",
+        })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
 
   describe("ALL /* any URL or method which has not been defined as an endpoint", () => {
     test('404: Responds with message "Not Found" ', () => {

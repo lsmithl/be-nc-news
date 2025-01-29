@@ -7,6 +7,7 @@ const {
   getArticlesById,
   getArticles,
   getCommentsByArticleId,
+  postCommentByArticleId,
 } = require("./controller");
 const {
   sqlError,
@@ -24,6 +25,10 @@ app.get("/api/articles/", getArticles);
 app.get("/api/articles/:article_id", getArticlesById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+app.use(express.json());
+
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.all("/*", badUrl);
 

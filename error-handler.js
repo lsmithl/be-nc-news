@@ -3,8 +3,12 @@ exports.badUrl = (req, res) => {
 };
 
 exports.sqlError = (err, req, res, next) => {
-  if (err.code === "22P02") {
+  if (/22P02|23502/.test(err.code)) {
     res.status(400).send({ msg: "Bad Request" });
+  } else if (err.constraint === "comments_author_fkey") {
+    res.status(401).send({ msg: "Unregistered User" });
+  } else if (/23503/.test(err.code)) {
+    res.status(404).send({ msg: "Not Found" });
   } else {
     next(err);
   }
