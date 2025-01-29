@@ -65,6 +65,10 @@
       "description": "adds a new comment to the specified article and responds with the successfully posted new comment",
       "parameters": ":article_id (Number)",
       "queries": [],
+      "exampleRequest": {
+        "body": "This is my first comment, and the first comment on this article! First²!",
+        "author": "icellusedkars"
+      },
       "exampleResponse": {
         "newComment": {
           "comment_id": 1,
