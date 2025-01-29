@@ -92,3 +92,21 @@ exports.insertCommentByArticleId = ({ article_id }, comment) => {
       return rows[0];
     });
 };
+
+exports.updateArticleVotesByArticleId = ({ article_id }, body) => {
+  return db
+    .query(
+      `UPDATE articles
+      SET votes = votes + $2
+      WHERE article_id = $1
+      RETURNING *;`,
+      [article_id, body.inc_votes]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not Found" });
+      } else {
+        return rows[0];
+      }
+    });
+};

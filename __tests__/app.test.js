@@ -211,6 +211,63 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("PATCH /api/articles/:article_id", () => {
+    test("200: Responds with an object containing the sucessfully updated article", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 1 })
+        .expect(200)
+        .then(({ body: { updatedArticle } }) => {
+          expect(updatedArticle).toMatchObject({
+            author: "butter_bridge",
+            title: "Living in the shadow of a great man",
+            article_id: 1,
+            body: "I find this existence challenging",
+            topic: "mitch",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 101,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+          });
+        });
+    });
+    test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
+      return request(app)
+        .patch("/api/articles/ten")
+        .send({ inc_votes: 1 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('400: Responds with message "Bad Request" if the body does not contain the correct fields', () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ something_which_isnt_votes: 1 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('400: Responds with message "Bad Request" if the body contains the correct fields but the wrong data type', () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: "Five" })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('404: Responds with message "Not Found" if the article ID doesn\'t exist', () => {
+      return request(app)
+        .patch("/api/articles/9999")
+        .send({ inc_votes: 1 })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
 
   describe("ALL /* any URL or method which has not been defined as an endpoint", () => {
     test('404: Responds with message "Not Found" ', () => {
