@@ -7,10 +7,17 @@ const {
   insertCommentByArticleId,
   updateArticleVotesByArticleId,
   removeCommentByCommentId,
+  selectUsers,
 } = require("./model.js");
 
 exports.getEndpoints = (req, res) => {
   res.send({ endpoints });
+};
+
+exports.getUsers = (req, res) => {
+  selectUsers().then((users) => {
+    res.send({ users });
+  });
 };
 
 exports.getTopics = (req, res) => {

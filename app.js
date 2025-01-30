@@ -10,6 +10,7 @@ const {
   postCommentByArticleId,
   patchArticleVotesByArticleId,
   deleteCommentByCommentId,
+  getUsers,
 } = require("./controller");
 const {
   sqlError,
@@ -19,6 +20,8 @@ const {
 } = require("./error-handler");
 
 app.get("/api", getEndpoints);
+
+app.get("/api/users", getUsers);
 
 app.get("/api/topics", getTopics);
 
