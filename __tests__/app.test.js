@@ -35,7 +35,7 @@ describe("nc_news", () => {
         });
     });
   });
-  describe.only("GET /api/articles", () => {
+  describe("GET /api/articles", () => {
     test("200: Responds with an object containing an array of all articles, sorted by date in descending order by default if no queries are provided", () => {
       return request(app)
         .get("/api/articles")

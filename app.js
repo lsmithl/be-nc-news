@@ -11,13 +11,13 @@ const {
   patchArticleVotesByArticleId,
   deleteCommentByCommentId,
   getUsers,
-} = require("./controller");
+} = require("./controller.js");
 const {
   sqlError,
   customError,
   serverError,
   badUrl,
-} = require("./error-handler");
+} = require("./error-handler.js");
 
 app.get("/api", getEndpoints);
 

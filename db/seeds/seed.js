@@ -1,10 +1,10 @@
 const format = require('pg-format');
-const db = require('../connection');
+const db = require('../connection.js');
 const {
   convertTimestampToDate,
   createRef,
   formatComments,
-} = require('../../utils/seedUtils');
+} = require('../../utils/seedUtils.js');
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db
