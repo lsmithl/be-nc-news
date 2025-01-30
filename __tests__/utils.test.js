@@ -2,7 +2,9 @@ const {
   convertTimestampToDate,
   createRef,
   formatComments,
-} = require("../db/seeds/utils");
+} = require("../utils/seedUtils.js");
+
+const { objectToLowerCase } = require("../utils/appUtils.js");
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -100,5 +102,24 @@ describe("formatComments", () => {
     const comments = [{ created_at: timestamp }];
     const formattedComments = formatComments(comments, {});
     expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
+  });
+});
+
+describe("objectToLowerCase", () => {
+  test("returns an empty object if passed an empty object", () => {
+    expect(objectToLowerCase({})).toEqual({});
+  });
+  test("returns an object where all keys and values are converted to lowercase", () => {
+    const input = { SORT_BY: "ARTICLE_ID", ORDER: "ASC" };
+    expect(objectToLowerCase(input)).toEqual({
+      sort_by: "article_id",
+      order: "asc",
+    });
+  });
+  test("does not mutate the input", () => {
+    const input = { SORT_BY: "ARTICLE_ID", ORDER: "ASC" };
+    const control = { SORT_BY: "ARTICLE_ID", ORDER: "ASC" };
+    objectToLowerCase(input);
+    expect(input).toEqual(control);
   });
 });

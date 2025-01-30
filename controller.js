@@ -1,3 +1,4 @@
+const { objectToLowerCase } = require("./utils/appUtils.js");
 const endpoints = require("./endpoints.json");
 const {
   selectTopics,
@@ -26,10 +27,14 @@ exports.getTopics = (req, res) => {
   });
 };
 
-exports.getArticles = (req, res) => {
-  selectArticles().then((articles) => {
-    res.send({ articles });
-  });
+exports.getArticles = (req, res, next) => {
+  selectArticles(objectToLowerCase(req.query))
+    .then((articles) => {
+      res.send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticlesById = (req, res, next) => {
