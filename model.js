@@ -1,5 +1,15 @@
 const db = require("./db/connection.js");
 
+exports.selectUsers = () => {
+  return db.query(`TABLE users;`).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "Not Found" });
+    } else {
+      return rows;
+    }
+  });
+};
+
 exports.selectTopics = () => {
   return db.query(`TABLE topics;`).then(({ rows }) => {
     if (rows.length === 0) {
