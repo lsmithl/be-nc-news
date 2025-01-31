@@ -150,7 +150,26 @@ describe("nc_news", () => {
           });
         });
     });
-    test("200: Responds correctly when given two queries. Queries are not case sensitive", () => {
+    test("200: Responds with a filtered list by the topic query value when query is ?topic=anytopic", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles.length).toBe(12);
+          articles.forEach((article) => {
+            expect(article.topic).toBe("mitch");
+          });
+        })
+        .then(() => {
+          return request(app)
+            .get("/api/articles?topic=topicdoesntexist")
+            .expect(200)
+            .then(({ body: { articles } }) => {
+              expect(articles).toEqual([]);
+            });
+        });
+    });
+    test("200: Responds correctly when given multiple queries. Queries are not case or order sensitive", () => {
       return request(app)
         .get("/api/articles?sort_by=votes&order=asc")
         .expect(200)
@@ -168,9 +187,18 @@ describe("nc_news", () => {
                 descending: false,
               });
             });
+        })
+        .then(() => {
+          return request(app)
+            .get("/api/articles?topic=mitch&sort_by=title&order=asc")
+            .expect(200)
+            .then(({ body: { articles } }) => {
+              expect(articles).toBeSortedBy("title", {
+                descending: false,
+              });
+            });
         });
     });
-
     test("200: Responds correctly and ignores any extra queries which aren't used", () => {
       return request(app)
         .get("/api/articles?hiii=3")
