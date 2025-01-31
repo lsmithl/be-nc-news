@@ -22,7 +22,7 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles, sorted by \"created_at\" \"desc\" (newest first) by default",
+    "description": "serves an array of all articles, optionally filtered by topic, sorted by \"created_at\" \"desc\" (newest first) by default",
     "queries: [validValues]": [
       {
         "sort_by": [

@@ -20,7 +20,11 @@ exports.selectTopics = () => {
   });
 };
 
-exports.selectArticles = ({ sort_by = "created_at", order = "desc" }) => {
+exports.selectArticles = ({
+  sort_by = "created_at",
+  order = "desc",
+  topic = "*",
+}) => {
   const validSortColumns = [
     "created_at",
     "article_id",
@@ -50,21 +54,16 @@ exports.selectArticles = ({ sort_by = "created_at", order = "desc" }) => {
       FROM articles
       LEFT JOIN comments
       ON articles.article_id = comments.article_id
+      WHERE ${topic !== "*" ? "articles.topic = $1" : "$1 = $1"}
       GROUP BY articles.article_id
       ORDER BY ${
         sort_by === "comment_count"
           ? "COUNT(comments.article_id)"
           : "articles." + sort_by
-      }
-      ${order};`
+      } ${order};`,
+      [topic]
     )
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "Not Found" });
-      } else {
-        return rows;
-      }
-    });
+    .then(({ rows }) => rows);
 };
 
 exports.selectArticlesById = ({ article_id }) => {
