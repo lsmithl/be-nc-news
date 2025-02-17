@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 const {
   getEndpoints,
@@ -41,6 +42,7 @@ app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 
 app.all("/*", badUrl);
 
+app.use(cors());
 app.use(sqlError);
 app.use(customError);
 app.use(serverError);
