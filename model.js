@@ -63,7 +63,19 @@ exports.selectArticles = ({
       } ${order};`,
       [topic]
     )
-    .then(({ rows }) => rows);
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return db
+          .query(`SELECT slug FROM topics WHERE slug = $1;`, [topic])
+          .then(({ rows: topicRows }) => {
+            if (topicRows.length === 0) {
+              return Promise.reject({ status: 404, msg: "Not Found" });
+            }
+            return [];
+          });
+      }
+      return rows;
+    });
 };
 
 exports.selectArticlesById = ({ article_id }) => {

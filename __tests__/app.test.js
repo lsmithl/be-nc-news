@@ -162,7 +162,7 @@ describe("nc_news", () => {
         })
         .then(() => {
           return request(app)
-            .get("/api/articles?topic=topicdoesntexist")
+            .get("/api/articles?topic=paper")
             .expect(200)
             .then(({ body: { articles } }) => {
               expect(articles).toEqual([]);
@@ -215,6 +215,14 @@ describe("nc_news", () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('404: Responds with message "Not Found" if the ?topic= query value does not exist in the db', () => {
+      return request(app)
+        .get("/api/articles?topic=topicdoesntexist")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
         });
     });
   });
