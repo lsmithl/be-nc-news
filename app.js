@@ -20,6 +20,8 @@ const {
   badUrl,
 } = require("./error-handler.js");
 
+app.use(cors());
+
 app.get("/api", getEndpoints);
 
 app.get("/api/users", getUsers);
@@ -42,7 +44,6 @@ app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 
 app.all("/*", badUrl);
 
-app.use(cors());
 app.use(sqlError);
 app.use(customError);
 app.use(serverError);
