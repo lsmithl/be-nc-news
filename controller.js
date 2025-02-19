@@ -9,6 +9,7 @@ const {
   updateArticleVotesByArticleId,
   removeCommentByCommentId,
   selectUsers,
+  updateCommentVotesByCommentId,
 } = require("./model.js");
 
 exports.getEndpoints = (req, res) => {
@@ -71,6 +72,15 @@ exports.patchArticleVotesByArticleId = (req, res, next) => {
   updateArticleVotesByArticleId(req.params, req.body)
     .then((updatedArticle) => {
       res.send({ updatedArticle });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+exports.patchCommentVotesByCommentId = (req, res, next) => {
+  updateCommentVotesByCommentId(req.params, req.body)
+    .then((updatedComment) => {
+      res.send({ updatedComment });
     })
     .catch((err) => {
       next(err);

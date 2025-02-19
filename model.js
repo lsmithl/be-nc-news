@@ -169,6 +169,24 @@ exports.updateArticleVotesByArticleId = ({ article_id }, body) => {
     });
 };
 
+exports.updateCommentVotesByCommentId = ({ comment_id }, body) => {
+  return db
+    .query(
+      `UPDATE comments
+      SET votes = votes + $2
+      WHERE comment_id = $1
+      RETURNING *;`,
+      [comment_id, body.inc_votes]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: "Not Found" });
+      } else {
+        return rows[0];
+      }
+    });
+};
+
 exports.removeCommentByCommentId = ({ comment_id }) => {
   return db
     .query(

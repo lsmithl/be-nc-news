@@ -12,6 +12,7 @@ const {
   patchArticleVotesByArticleId,
   deleteCommentByCommentId,
   getUsers,
+  patchCommentVotesByCommentId,
 } = require("./controller.js");
 const {
   sqlError,
@@ -39,6 +40,8 @@ app.use(express.json());
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.patch("/api/articles/:article_id", patchArticleVotesByArticleId);
+
+app.patch("/api/comments/:comment_id", patchCommentVotesByCommentId);
 
 app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 

@@ -434,6 +434,59 @@ describe("nc_news", () => {
         });
     });
   });
+  describe("PATCH /api/comments/:comment_id", () => {
+    test("200: Responds with an object containing the sucessfully updated article", () => {
+      return request(app)
+        .patch("/api/comments/1")
+        .send({ inc_votes: 1 })
+        .expect(200)
+        .then(({ body: { updatedComment } }) => {
+          expect(updatedComment).toMatchObject({
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            votes: 17,
+            author: "butter_bridge",
+            article_id: 9,
+            created_at: "2020-04-06T12:17:00.000Z",
+          });
+        });
+    });
+    test('400: Responds with message "Bad Request" if the request parameter is not a number', () => {
+      return request(app)
+        .patch("/api/comments/ten")
+        .send({ inc_votes: 1 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('400: Responds with message "Bad Request" if the body does not contain the correct fields', () => {
+      return request(app)
+        .patch("/api/comments/1")
+        .send({ something_which_isnt_votes: 1 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('400: Responds with message "Bad Request" if the body contains the correct fields but the wrong data type', () => {
+      return request(app)
+        .patch("/api/comments/1")
+        .send({ inc_votes: "Five" })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad Request");
+        });
+    });
+    test('404: Responds with message "Not Found" if the article ID doesn\'t exist', () => {
+      return request(app)
+        .patch("/api/comments/9999")
+        .send({ inc_votes: 1 })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not Found");
+        });
+    });
+  });
   describe("DELETE /api/comments/:comment_id", () => {
     test("204: Responds with no content and deletes the specified comment", () => {
       return request(app)
